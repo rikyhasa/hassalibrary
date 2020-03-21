@@ -83,6 +83,18 @@ if __name__ == '__main__':
         print(carnivoro)
         visualizza_personaggio(WARRIOR_ICON_URL, carnivoro)
 
+    running = True
+    while running:                                  # ciclo infinito
+        for event in pygame.event.get():            # prendo gli eventi
+            
+            if event.type == pygame.QUIT:           # controllo che l'evento sia un qit
+                running = False                     # So the user can close the program
+                
+        #screen.fill(0,0,0) # This fills the screen with black colour.
+        pygame.display.flip() # This "flips" the display so that it shows something
+    pygame.quit()
+    
+
     
 
     
