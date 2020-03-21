@@ -23,7 +23,22 @@ class Erbivoro:
 
     def __str__(self):
         return "Erbivoro @ (%s,%s)" % (str(self.pos_x), str(self.pos_y))
-        
+
+class Carnivoro:
+    
+    '''
+        pos_x
+        pos_y
+    '''
+    def __init__(self, x, y):
+        self.pos_x = x
+        self.pos_y = y
+
+    def __str__(self):
+        return "Carnivoro @ (%s,%s)" % (str(self.pos_x), str(self.pos_y))
+
+
+     
 if __name__ == '__main__':
     # da qui esegui il programma
     #pygame.init()
@@ -40,3 +55,21 @@ if __name__ == '__main__':
 
     for e in erbivori:
         print(e)
+
+
+    carnivori = list()                               
+    for n in range(N_CARNIVORI):
+        x = random.randint(0, LARGHEZZA_CAMPO)      
+        y = random.randint(0, LUNGHEZZA_CAMPO)     
+
+        e = Carnivoro(x, y)
+        carnivori.append(e)                          
+
+    for e in carnivori:
+        print(e)
+
+    # devi fare l'inizializzazione dei carnivori
+
+
+# TO DO LIST
+#   prox_volta: eridarietà
