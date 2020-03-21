@@ -1,10 +1,11 @@
 import pygame
 import random
+import time
 LARGHEZZA_FINESTRA = 1000
 LUNGHEZZA_FINESTRA = 800
 
-LARGHEZZA_CAMPO = 10
-LUNGHEZZA_CAMPO = 10
+LARGHEZZA_CAMPO = LARGHEZZA_FINESTRA
+LUNGHEZZA_CAMPO = LUNGHEZZA_FINESTRA
 
 N_ERBIVORI = 5
 N_CARNIVORI= 5
@@ -25,6 +26,7 @@ class Erbivoro:
     def __init__(self, x, y):
         self.pos_x = x
         self.pos_y = y
+        self.rect = None
 
     def __str__(self):
         return "Erbivoro @ (%s,%s)" % (str(self.pos_x), str(self.pos_y))
@@ -46,9 +48,15 @@ def visualizza_personaggio(url, personaggio):
     image = pygame.image.load(url)
     rect = image.get_rect()
     rect.center = (personaggio.pos_x, personaggio.pos_y)
+    personaggio.rect = rect
     screen.blit(image, rect)
 
-
+def muovi(personaggio):
+    rect = personaggio.rect
+    personaggio.pos_x = personaggio.pos_x + 1
+    personaggio.pos_y = personaggio.pos_y
+    rect.right = rect.right + 10
+    pygame.display.flip()
 
 # IL PROGRAMMA INIZIA AD ESEGUIRE DA QUI     
 if __name__ == '__main__':
@@ -85,6 +93,7 @@ if __name__ == '__main__':
 
     running = True
     while running:                                  # ciclo infinito
+        muovi(erbivori[3])
         for event in pygame.event.get():            # prendo gli eventi
             
             if event.type == pygame.QUIT:           # controllo che l'evento sia un qit
