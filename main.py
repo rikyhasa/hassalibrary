@@ -11,6 +11,11 @@ N_CARNIVORI= 5
 V_ERBIVORI= 1
 V_CARNIVORI= 1
 
+FPS = 30
+
+MAGE_ICON_URL = "human_mage.png"
+WARRIOR_ICON_URL = "human_warrior.png"
+
 class Erbivoro:
 
     # Il costruttore di una classe, è quella funzione che viene chiamata
@@ -37,12 +42,21 @@ class Carnivoro:
     def __str__(self):
         return "Carnivoro @ (%s,%s)" % (str(self.pos_x), str(self.pos_y))
 
+def visualizza_personaggio(url, personaggio):
+    image = pygame.image.load(url)
+    rect = image.get_rect()
+    rect.center = (personaggio.pos_x, personaggio.pos_y)
+    screen.blit(image, rect)
 
-     
+
+
+# IL PROGRAMMA INIZIA AD ESEGUIRE DA QUI     
 if __name__ == '__main__':
-    # da qui esegui il programma
-    #pygame.init()
-    #screen = pygame.display.set_mode((LARGHEZZA_FINESTRA, LUNGHEZZA_FINESTRA))
+
+    pygame.init()
+    screen = pygame.display.set_mode((LARGHEZZA_FINESTRA, LUNGHEZZA_FINESTRA))
+    screen.fill((0, 50, 0))
+    clk = pygame.time.Clock()
 
     ###### INIZIALIZZAZIONE
     erbivori = list()                               # creo la lista di erbivori
@@ -53,9 +67,9 @@ if __name__ == '__main__':
         e = Erbivoro(x, y)                          # creo erbivoro
         erbivori.append(e)                          # aggiungo erbivoro alla lista
 
-    for e in erbivori:
-        print(e)
-
+    for erbivoro in erbivori:
+        print(erbivoro)
+        visualizza_personaggio(MAGE_ICON_URL, erbivoro)
 
     carnivori = list()                               
     for n in range(N_CARNIVORI):
@@ -65,11 +79,10 @@ if __name__ == '__main__':
         e = Carnivoro(x, y)
         carnivori.append(e)                          
 
-    for e in carnivori:
-        print(e)
+    for carnivoro in carnivori:
+        print(carnivoro)
+        visualizza_personaggio(WARRIOR_ICON_URL, carnivoro)
 
-    # devi fare l'inizializzazione dei carnivori
+    
 
-
-# TO DO LIST
-#   prox_volta: eridarietà
+    
