@@ -8,38 +8,40 @@ import math
 #paesi.index('roma')) #<------ti dice in che posto è
 #min(lista)
 
+
+############## Parametri
+n_cavaliere = 6
+n_mago = 20
+LARGHEZZA = 800
+LUNGHEZZA = 600
+fps = 30
+
 ###############inizializzazione
 pygame.init()
-screen = pygame.display.set_mode((800, 600))
+screen = pygame.display.set_mode((LARGHEZZA, LUNGHEZZA))
 
 clk = pygame.time.Clock()
-fps = 30
+pygame.mixer.music.load("colonna_sonora.mp3")
+#pygame.mixer.music.play()
+#pygame.mixer.music.set_volume(0.6)
 
 
 ##############classi
 class erbivoro:
-    """
-    pos_x
-    pos_y
-    vel_x
-    vel_y
-    """
+    # Uso il costrutture per fare il setup della classe quando viene istanziata
+    def __init__(self, vel=2):
+    	self.pos_x = random.randint(0,LARGHEZZA)
+    	self.pos_y = random.randint(0,LUNGHEZZA) 
+    	self.vel_x = vel
+    	self.vel_y = vel
+
 class carnivoro:
-    """
-    pos_x
-    pos_y
-    vel_x
-    vel_y
-    """
+    def __init__(self, vel=2.5):
+    	self.pos_x = random.randint(0,LARGHEZZA)
+    	self.pos_y = random.randint(0,LUNGHEZZA) 
+    	self.vel_x = vel
+    	self.vel_y = vel
 
-
-#############quantità di personaggi
-n_cavaliere = 6
-n_mago = 6
-
-
-#############velocità
-vel = [2, 2.5]
 
 ###############sfondo
 ##surf_back = pygame.image.load("Backgrounds/desert_02.jpg").convert()
@@ -59,7 +61,7 @@ def tile_surface(surf_little, surf_big):       # surf_little e' la mattonella, s
 #########game over
 game_over_surf = pygame.image.load("gameover2.png")
 game_over_rect = game_over_surf.get_rect()
-game_over_rect.center = ( 400, 300 )
+game_over_rect.center = ( LARGHEZZA/2, LUNGHEZZA/2 )
 
 ###########spown maghi
 lista_mago = []
@@ -68,10 +70,6 @@ lista_mago_surface = []
 i = 0
 while i<n_mago:
     mago = erbivoro()
-    mago.pos_x = random.randint(0,800)
-    mago.pos_y = random.randint(0,600) 
-    mago.vel_x = vel[0]
-    mago.vel_y = vel[0]
     
     immage_mago = pygame.image.load("human_mage.png")
     rect_mago = immage_mago.get_rect()
@@ -92,10 +90,6 @@ lista_cavaliere_surface = []
 cont = 0
 while cont<n_cavaliere:
     cavaliere = carnivoro()
-    cavaliere.pos_x = random.randint(0,800)
-    cavaliere.pos_y = random.randint(0,600)
-    cavaliere.vel_x = vel[1]
-    cavaliere.vel_y = vel[1]
     
     immage_cavaliere = pygame.image.load("human_warrior.png")
     rect_cavaliere = immage_cavaliere.get_rect()
@@ -113,34 +107,31 @@ while cont<n_cavaliere:
 
 ###################def distanze
 def distanze( elemento, lista ):
-
     #######controllo
     if len(lista_mago_surface)<=0:
         return 
-    else:
-        pass
     
     lista_dist = []
     i = 0
     while i<len(lista):
         dx = abs(elemento.pos_x - lista[i].pos_x)
         dy = abs(elemento.pos_y - lista[i].pos_y)
-        if dx>400 and dy>300:
-            Dx = 800-dx
-            Dy = 600-dy
+        if dx>LARGHEZZA/2 and dy>LUNGHEZZA/2:
+            Dx = LARGHEZZA-dx
+            Dy = LUNGHEZZA-dy
             dist = math.sqrt((Dx)**2+(Dy)**2)
     
-        elif dx>400 and dy<300:
-            Dx = 800-dx
+        elif dx>LARGHEZZA/2 and dy<LUNGHEZZA/2:
+            Dx = LARGHEZZA-dx
             Dy = dy
             dist = math.sqrt((Dx)**2+(Dy)**2)
            
-        elif dx<400 and dy>300:
+        elif dx<LARGHEZZA/2 and dy>LUNGHEZZA/2:
             Dx = dx
-            Dy = 600-dy
+            Dy = LUNGHEZZA-dy
             dist = math.sqrt((Dx)**2+(Dy)**2)
     
-        elif dx<400 and dy<300:
+        elif dx<LARGHEZZA/2 and dy<LUNGHEZZA/2:
             dist = math.sqrt((dx)**2+(dy)**2)
 
         lista_dist.append(dist)
@@ -191,23 +182,23 @@ def velocità_mago( bersaglio,elemento,dist ):
     dy = elemento.pos_y-bersaglio.pos_y
     #print ( 'dx/dy erbivoro',dx,dy )
     #vel x
-    if dx<400 and dx>-400:
+    if dx<LARGHEZZA/2 and dx>-LARGHEZZA/2:
         vel_mago_x = elemento.vel_x*(dx/dist)
-    if dx>=400:
-        dx = -800+dx
+    if dx>=LARGHEZZA/2:
+        dx = -LARGHEZZA+dx
         vel_mago_x = elemento.vel_x*(dx/dist)
-    if dx<-400:
-        dx = 800+dx 
+    if dx<-LARGHEZZA/2:
+        dx = LARGHEZZA+dx 
         vel_mago_x = elemento.vel_x*(dx/dist)
 
     #vel y
-    if dy<300 and dy>-300:
+    if dy<LUNGHEZZA/2 and dy>-LUNGHEZZA/2:
         vel_mago_y = elemento.vel_y*(dy/dist)
-    if dy>=300:
-        dy = -600+dy
+    if dy>=LUNGHEZZA/2:
+        dy = -LUNGHEZZA+dy
         vel_mago_y = elemento.vel_y*(dy/dist)
-    if dy<-300:
-        dy = 600+dy
+    if dy<-LUNGHEZZA/2:
+        dy = LUNGHEZZA+dy
         vel_mago_y = elemento.vel_y*(dy/dist)
     lista_vel_mago = [vel_mago_x,vel_mago_y]
     #print ( 'dx/dy erbivoro',dx,dy )
@@ -227,23 +218,23 @@ def velocità_cavaliere( bersaglio,elemento,dist ):
     dy = elemento.pos_y-bersaglio.pos_y
     #print ( 'dx/dy carnivoro',dx,dy )
     #vel x
-    if dx<400 and dx>-400:
+    if dx<LARGHEZZA/2 and dx>-LARGHEZZA/2:
         vel_carniv_x = elemento.vel_x*(dx/dist)*(-1)
-    if dx>=400:
-        dx = -800+dx
+    if dx>=LARGHEZZA/2:
+        dx = -LARGHEZZA+dx
         vel_carniv_x = elemento.vel_x*(dx/dist)*(-1)
-    if dx<-400:
-        dx = 800+dx 
+    if dx<-LARGHEZZA/2:
+        dx = LARGHEZZA+dx 
         vel_carniv_x = elemento.vel_x*(dx/dist)*(-1)
 
     #vel y
-    if dy<300 and dy>-300:
+    if dy<LUNGHEZZA/2 and dy>-LUNGHEZZA/2:
         vel_carniv_y = elemento.vel_y*(dy/dist)*(-1)
-    if dy>=300:
-        dy = -600+dy
+    if dy>=LUNGHEZZA/2:
+        dy = -LUNGHEZZA+dy
         vel_carniv_y = elemento.vel_y*(dy/dist)*(-1)
-    if dy<-300:
-        dy = 600+dy
+    if dy<-LUNGHEZZA/2:
+        dy = LUNGHEZZA+dy
         vel_carniv_y = elemento.vel_y*(dy/dist)*(-1)
     lista_vel_carniv = [vel_carniv_x,vel_carniv_y]
     #print ( 'dx/dy carnivoro',dx,dy )
@@ -327,8 +318,6 @@ while not done:
         if len(lista_mago_surface)<=0:
             done = True
             break
-        else:
-            pass
         
         bersaglio_distanza_index = distanze(lista_cavaliere[i],lista_mago)
         if bersaglio_distanza_index[1] < 1.5:
@@ -336,8 +325,6 @@ while not done:
             del lista_mago[bersaglio_distanza_index[2]]
             del lista_mago_rect[bersaglio_distanza_index[2]]
             del lista_mago_surface[bersaglio_distanza_index[2]]
-        else:
-            pass
         i += 1
     
     ##########mondo infinito
